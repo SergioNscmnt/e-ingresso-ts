@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+
+  id String @id @default(uuid())
+  name String
+  email String
+  password String
+  cnpj String?
+  address String
+  age Int
+  cpf String
+  created_at DateTime @default(now())
+  update_at DateTime @default(now())
+
+  @@map("users")
+}
+
+model Category {
+
+  id String @id @default(uuid())
+  name String
+  created_at DateTime? @default(now())
+  updated_ad DateTime? @default(now())
+
+  @@map("categories")
+  events Event[]
+}
+
+model Event {
+
+  id String @id @default(uuid())
+  name String
+  price String
+  description String
+  banner String
+  created_at DateTime? @default(now())
+  updated_ad DateTime? @default(now())
+
+  category Category @relation(fields: [category_id], references: [id])
+  @@map("events")
+  category_id String
+  tickets Ticket[]
+}
+
+model Ticket {
+  
+  id String @id @default(uuid())
+  name String
+  description String
+  status Boolean
+  draft Boolean
+  payment DateTime? @default(now())
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  event Event @relation(fields:[event_id], references:[id])
+  @@map("tickets")
+  event_id String
+    
+}
